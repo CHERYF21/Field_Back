@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,6 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 public class Sale {
     
-   
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid" , strategy = "uuid2")
@@ -39,9 +39,8 @@ public class Sale {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date date_sale; 
  
-    
     @Column(name = "total_pagado")
-    int total_paid;
+    Integer total_paid;
     
     @ManyToOne
     @JoinColumn(name = "usuario")

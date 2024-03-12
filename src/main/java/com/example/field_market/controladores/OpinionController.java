@@ -5,6 +5,12 @@
 package com.example.field_market.controladores;
 
 import com.example.field_market.entidades.Opinion;
+import com.example.field_market.entidades.Product;
+import com.example.field_market.entidades.Usuario;
+import com.example.field_market.excepciones.MiException;
+import com.example.field_market.repositorios.ProductRepository;
+import com.example.field_market.repositorios.UsuarioRepository;
+import com.example.field_market.request.OpinionRequest;
 import com.example.field_market.servicios.OpinionService;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  *
@@ -31,13 +38,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OpinionController {
     
     private final OpinionService opinionService;
+    private final ProductRepository productRepository;
+    private final UsuarioRepository usuarioRepository;
     
     //crear comentario
     @PostMapping("/createOpinion")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<Opinion> createdOpinion (@RequestBody Opinion opinion){
-      Opinion createOpinion = opinionService.createOpinion(opinion);
-      return new ResponseEntity<>(createOpinion, HttpStatus.CREATED);
+    public ResponseEntity<String> createdOpinion (@RequestBody OpinionRequest request){
+      try{
+          String id_product = request.getProduct();
+          Product product = productRepository.findById(id_product).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Producto no encontrado"));
+          String id = request.getUsuario();
+          Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Usuario no encontrado"));
+          
+          Opinion opinion = new Opinion();
+          opinion.setOpinion(request.getOpinion());
+          opinion.setRating(request.getRating());
+          opinion.setProduct(product);
+          opinion.setUsuario(usuario);
+          
+          opinionService.createOpinion(opinion);
+          return new ResponseEntity<>("Opinion enviada",HttpStatus.CREATED);
+      } catch (ResponseStatusException ex){
+          return new ResponseEntity<>("Error al enviar opinion" + ex.getMessage(),ex.getStatus());
+      } catch (Exception ex){
+          return new ResponseEntity<>("Error al enviar opinion: " + ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
     
     //listar opiniones
@@ -60,18 +86,20 @@ public class OpinionController {
     //actualizar una opinion
     @PutMapping("/{id_opinion}")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<String> updateSdetail(@PathVariable("id_opinion") String id_opinion, @RequestBody Opinion updatedOpinion) {
-        String result = opinionService.updateOpinion(id_opinion, updatedOpinion);
-        if (result.startsWith("la opinion con el ID")) {
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> updateSdetail(@PathVariable String id_opinion, @RequestBody Opinion opinion) {
+        try{
+            opinionService.updateOpinion(id_opinion, opinion);
+            return ResponseEntity.ok("Opinion enviada con exito");
+        } catch (MiException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar opinion" + ex.getMessage());
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     //eliminar opinion
-    @DeleteMapping("/{id_opinion}")
-     @CrossOrigin(origins = "http://localhost:3000")
-     public ResponseEntity<String> deleteSale(@PathVariable("id_opinion") String id_opinion) {
+    //@DeleteMapping("/{id_opinion}/delete")
+    @DeleteMapping("/deleteOpinion/{id_opinion}") //se cambio el de arriba por este  <--
+    @CrossOrigin(origins = "http://localhost:3000")
+     public ResponseEntity<String> deleteOpinion(@PathVariable("id_opinion") String id_opinion) {
         String result = opinionService.deleteOpinion(id_opinion);
         if (result.startsWith("la opinion con el ID")) {
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

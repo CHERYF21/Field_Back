@@ -31,8 +31,7 @@ public class Websecurity {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/user/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("**").permitAll()
                 .and()
                 .sessionManagement(sessionManager ->
                 sessionManager

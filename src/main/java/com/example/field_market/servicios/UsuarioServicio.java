@@ -44,7 +44,7 @@ public class UsuarioServicio {
               user.setNombre(request.getNombre());
               user.setDireccion(request.getDireccion());
               user.setTelefono(request.getTelefono());
-              user.setRol(Rol.Agricultor);
+              user.setRol(request.getRol());
 
             usuarioRepository.save(user);
             

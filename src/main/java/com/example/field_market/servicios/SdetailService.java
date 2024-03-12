@@ -5,6 +5,7 @@
 package com.example.field_market.servicios;
 
 import com.example.field_market.entidades.Sales_Detaill;
+import com.example.field_market.excepciones.MiException;
 import com.example.field_market.repositorios.SdetailRepository;
 import java.util.List;
 import java.util.Optional;
@@ -37,16 +38,21 @@ public class SdetailService {
     }
     
     //actualizar un detalle
-    public String updateSdetail(String id_detail, Sales_Detaill updateSdetail){
+    public void updateSdetail(String id_detail, Sales_Detaill updateSdetaill) throws MiException{
         Optional<Sales_Detaill> optionalSdetail = sdetailRepository.findById(id_detail);
+        
         if(optionalSdetail.isPresent()){
-           Sales_Detaill existingSdetail = optionalSdetail.get();
-           existingSdetail.setUnit_value(updateSdetail.getUnit_value());
-           existingSdetail.setQuantity(updateSdetail.getQuantity());
-           sdetailRepository.save(existingSdetail);
-           return "Detalle de venta Actualizado con exito";
+           Sales_Detaill sales_Detaill = optionalSdetail.get();
+           
+           sales_Detaill.setUnit_value(updateSdetaill.getUnit_value());
+           sales_Detaill.setQuantity(updateSdetaill.getQuantity());
+           //establlecer la venta
+           sales_Detaill.setSale(updateSdetaill.getSale());
+           //establecer el producto
+           sales_Detaill.setProduct(updateSdetaill.getProduct());
+           sdetailRepository.save(sales_Detaill);
         } else {
-            return "El detalle de venta con el id: " + id_detail + "no existe";
+           throw new MiException("Detalle de venta no encontrado");
         }  
     }
     

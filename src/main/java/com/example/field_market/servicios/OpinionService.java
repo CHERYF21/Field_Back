@@ -5,6 +5,7 @@
 package com.example.field_market.servicios;
 
 import com.example.field_market.entidades.Opinion;
+import com.example.field_market.excepciones.MiException;
 import com.example.field_market.repositorios.OpinionRepository;
 import java.util.List;
 import java.util.Optional;
@@ -37,18 +38,20 @@ public class OpinionService {
     }
     
     //actualizar Opinion
-    public String updateOpinion(String id_opinion, Opinion updateOpinion){
+    public void updateOpinion(String id_opinion, Opinion updateOpinion) throws MiException{
         Optional<Opinion> optionalOpinion = opinionRepository.findById(id_opinion);
+        
         if(optionalOpinion.isPresent()){
             Opinion opinion = optionalOpinion.get();
+            
             opinion.setOpinion(updateOpinion.getOpinion());
             opinion.setRating(updateOpinion.getRating());
             opinion.setProduct(updateOpinion.getProduct());
             opinion.setUsuario(updateOpinion.getUsuario());
             opinionRepository.save(opinion);
-            return "Opinion actualizada con exito";   
+             
         }else{
-            return "La opinion con ID: " + id_opinion + "no existe";
+            throw new MiException("Opinion no encontrada");
         }
     }
     

@@ -53,12 +53,13 @@ public class JwtService {
     private Claims getAllClaims(String token)
     {
         return Jwts
-                .parserBuilder()
-                .setSigningKey(getKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+            .parser()
+            .setSigningKey(getKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
     }
+
     
     public <T> T getClaim(String token, Function<Claims,T> claimsResolver)
     {
