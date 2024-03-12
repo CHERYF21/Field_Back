@@ -10,6 +10,7 @@ import com.example.field_market.entidades.Rol;
 import com.example.field_market.entidades.UserResponse;
 import com.example.field_market.entidades.Usuario;
 import com.example.field_market.repositorios.UsuarioRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +52,10 @@ public class UsuarioServicio {
             return UserResponse.builder()
                     .token(jwtService.getToken(user))
                     .build();
+    }
+    
+    public List<Usuario> listUser(){
+        return usuarioRepository.findAll();
     }
     
 }

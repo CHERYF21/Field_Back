@@ -81,9 +81,11 @@ public class ProductController {
         
         try{
             Product product = new Product();
+            byte[] fileBytes = img.getBytes();
             product.setTitle(title);
             product.setPrice(price);
             product.setQuantity(quantity);
+            product.setImg(fileBytes);
             Category category = categoryRepository.findById(id_category).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria no encontrada"));
             product.setCategory(category);
             Usuario usuario = usuariorepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
