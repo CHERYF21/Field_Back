@@ -93,7 +93,7 @@ public class SaleController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> updateSale(@PathVariable String id_sale, @RequestBody Sale sale) {
         try{
-            saleService.
+            saleService.updateSale(id_sale, sale);
             return ResponseEntity.ok("Factura actualizada con exito");
         } catch (MiException ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar factura" + ex.getMessage());
