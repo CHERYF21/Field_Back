@@ -54,6 +54,7 @@ public class SaleController {
     public ResponseEntity<String> createSale(@RequestBody SaleRequest request){
         try{
             String id = request.getId();
+            System.out.println(id);
             Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"usuario no encontrado"));
             
             Sale sale = new Sale();
@@ -92,7 +93,7 @@ public class SaleController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> updateSale(@PathVariable String id_sale, @RequestBody Sale sale) {
         try{
-            saleService.updateSale(id_sale, sale);
+            saleService.
             return ResponseEntity.ok("Factura actualizada con exito");
         } catch (MiException ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar factura" + ex.getMessage());
