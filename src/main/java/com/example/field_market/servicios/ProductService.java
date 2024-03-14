@@ -7,6 +7,7 @@ import com.example.field_market.excepciones.MiException;
 import com.example.field_market.repositorios.CategoryRepository;
 import org.springframework.stereotype.Service;
 import com.example.field_market.repositorios.ProductRepository;
+import com.example.field_market.repositorios.SalesUnitRepository;
 import com.example.field_market.repositorios.UsuarioRepository;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,9 @@ public class ProductService {
     CategoryRepository categoryRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    SalesUnitRepository saleUnitRepository;
+    
     
     @Transactional
     public void CreateProduct(Product product) throws MiException{
@@ -44,6 +48,7 @@ public class ProductService {
                product.setQuantity(updateProduct.getQuantity());
                product.setPrice(updateProduct.getPrice());
                product.setCategory(updateProduct.getCategory());
+               product.setSales_unit(updateProduct.getSales_unit());
                productRepository.save(product);
             } else {
             throw new MiException("Producto no encontrado");

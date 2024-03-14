@@ -3,11 +3,13 @@ package com.example.field_market.controladores;
 
 import com.example.field_market.entidades.Category;
 import com.example.field_market.entidades.Product;
+import com.example.field_market.entidades.Sales_unit;
 import com.example.field_market.entidades.Usuario;
 import com.example.field_market.excepciones.MiException;
 import com.example.field_market.servicios.ProductService;
 import com.example.field_market.repositorios.CategoryRepository;
 import com.example.field_market.repositorios.ProductRepository;
+import com.example.field_market.repositorios.SalesUnitRepository;
 import com.example.field_market.repositorios.UsuarioRepository;
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +34,9 @@ public class ProductController {
     UsuarioRepository usuariorepository;
      @Autowired
     ProductRepository productRepository;
+     @Autowired
+    SalesUnitRepository saleUnitRepository;
+     
     
     //list Products
     @PostMapping("/createProduct")
@@ -43,11 +48,13 @@ public class ProductController {
             @RequestParam("descripcion") String description,
             @RequestParam("price") Double price,
             @RequestParam("quantity") Integer quantity,
+             @RequestParam("id_saleUnit") String id_saleUnit,
             @RequestParam("img") MultipartFile img){
         
         try{
             Category category = categoryRepository.findById(id_category).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria no encontrada"));
             Usuario usuario = usuariorepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrada"));
+            Sales_unit salesunit = saleUnitRepository.findById(id_saleUnit).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unidad no encontrada"));
             
             Product product = new Product();
             byte[] fileBytes = img.getBytes();
@@ -58,6 +65,7 @@ public class ProductController {
             product.setTitle(title);
             product.setQuantity(quantity);
             product.setImg(fileBytes);
+            product.setSales_unit(salesunit);
             
             productService.CreateProduct(product);
             return new ResponseEntity<>("Producto creado con exito",HttpStatus.CREATED);
@@ -107,7 +115,7 @@ public class ProductController {
         return product;
     }
        
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id_product}/delete")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> deleteProduct(@PathVariable String id_product){
         productService.deleteProduct(id_product);

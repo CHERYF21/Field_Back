@@ -1,4 +1,5 @@
 package com.example.field_market.entidades;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,13 +32,17 @@ public class Product {
     private Integer quantity;
     private String title;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="usuario")
     Usuario usuario;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="categoria")
     Category category;
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="unidad_de_venta")
+    Sales_unit sales_unit;
 
 }
 
