@@ -22,15 +22,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SaleService {
-    
+
     private final SaleRepository saleRepository;
     @Autowired
-    UsuarioRepository usuarioRepository; 
-    
+    UsuarioRepository usuarioRepository;
+
     @Transactional
-    public void createSale(Sale sale) throws MiException{
+    public void createSale(Sale sale) throws MiException {
         validateSale(sale);
-        
+
         saleRepository.save(sale);
     }
 
@@ -46,21 +46,23 @@ public class SaleService {
 
     // Actualizar una venta
     public void updateSale(String id_sale, Sale updatedSale) throws MiException {
-    Optional<Sale> optionalSale = saleRepository.findById(id_sale);
+        Optional<Sale> optionalSale = saleRepository.findById(id_sale);
 
-    if (optionalSale.isPresent()) {
-        Sale sale = optionalSale.get();
-        
-        sale.setDate_sale(updatedSale.getDate_sale());
-        sale.setTotal_paid(updatedSale.getTotal_paid());
-        //establecer el usuario de la venta
-        sale.setUsuario(updatedSale.getUsuario());
-        saleRepository.save(sale);
-        
-    } else {
-        throw new MiException("Venta no encontrada");
+        if (optionalSale.isPresent()) {
+            Sale sale = optionalSale.get();
+
+            if (updatedSale.getDate_sale() != null) {
+                sale.setDate_sale(updatedSale.getDate_sale());
+            }
+            if (updatedSale.getTotal_paid() != null) {
+            sale.setTotal_paid(updatedSale.getTotal_paid());
+            }
+            saleRepository.save(sale);
+
+        } else {
+            throw new MiException("Venta no encontrada");
+        }
     }
-}
 
     // Eliminar una venta
     public String deleteSale(String id_sale) {
@@ -73,22 +75,20 @@ public class SaleService {
             return "La venta con el ID " + id_sale + " no existe.";
         }
     }
-    
-    private void validateSale(Sale sale) throws MiException{
-        if (sale == null){
+
+    private void validateSale(Sale sale) throws MiException {
+        if (sale == null) {
             throw new MiException("La venta no se encuentra");
         }
-        if(sale.getTotal_paid() == null){
+        if (sale.getTotal_paid() == null) {
             throw new MiException("Valor nulo");
         }
-        if(sale.getUsuario() == null){
-           throw new MiException("usuario nulo");  
+        if (sale.getUsuario() == null) {
+            throw new MiException("usuario nulo");
         }
-        if(sale.getDate_sale() == null){
-           throw new MiException("fecha vacia"); 
+        if (sale.getDate_sale() == null) {
+            throw new MiException("fecha vacia");
         }
     }
-    
-    
-    
+
 }

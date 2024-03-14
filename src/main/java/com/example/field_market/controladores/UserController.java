@@ -38,9 +38,8 @@ public class UserController {
         return ResponseEntity.ok(usuarioServicio.register(request));
     }
    
-    @GetMapping("/listUser")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<List<Usuario>> getAllUser(){
+    @GetMapping("/user-rest/listUser")
+    public ResponseEntity<List> getAllUser(){
         List<Usuario> usuario = usuarioServicio.listUser();
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }

@@ -54,6 +54,7 @@ public class SaleController {
     public ResponseEntity<String> createSale(@RequestBody SaleRequest request){
         try{
             String id = request.getId();
+            System.out.println(id);
             Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"usuario no encontrado"));
             
             Sale sale = new Sale();
