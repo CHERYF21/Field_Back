@@ -27,20 +27,25 @@ public class Websecurity {
     @Bean
    public  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
    { 
-       return http
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                .antMatchers("**").permitAll()
-                .and()
-                .sessionManagement(sessionManager ->
-                sessionManager
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+         return http
+                .csrf(csrf
+                        -> csrf
+                        .disable())
+                .authorizeHttpRequests(authRequest
+                        -> authRequest
+                        .antMatchers("/auth/**").permitAll()
+                        .antMatchers("/auth/verify").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(sessionManager
+                        -> sessionManager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors()
-                .and().headers().and()
+                .cors().and().headers().and()
                 .build();
+
+    
    }
   
 }

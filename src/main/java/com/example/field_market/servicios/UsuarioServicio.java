@@ -29,11 +29,14 @@ public class UsuarioServicio {
     
     public UserResponse login(LoginRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user=usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token=jwtService.getToken(user);
+        UserDetails userdetails=usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
+        Usuario usuario=usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
+        String token=jwtService.getToken(userdetails);
         return UserResponse.builder()
                 .token(token)
+                .usuario(usuario)
                 .build();
+                
     }
     
     public UserResponse register(RegisterRequest request){
@@ -56,6 +59,15 @@ public class UsuarioServicio {
     
     public List<Usuario> listUser(){
         return usuarioRepository.findAll();
+    }
+    
+    public UserResponse verify(String token) {
+        String userName = jwtService.getUsernameFromToken(token);
+        Usuario user = usuarioRepository.findByUsername(userName).orElseThrow();
+        return UserResponse.builder()
+                .token(jwtService.getToken(user))
+                .usuario(user)
+                .build();
     }
     
 }

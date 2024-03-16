@@ -2,24 +2,25 @@ package com.example.field_market.controladores;
 
 import com.example.field_market.entidades.LoginRequest;
 import com.example.field_market.entidades.RegisterRequest;
-import com.example.field_market.entidades.Sale;
 import com.example.field_market.entidades.UserResponse;
 import com.example.field_market.entidades.Usuario;
 import com.example.field_market.servicios.UsuarioServicio;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;  
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class UserController {
     
@@ -39,9 +40,17 @@ public class UserController {
     }
    
     @GetMapping("/user-rest/listUser")
-    public ResponseEntity<List> getAllUser(){
-        List<Usuario> usuario = usuarioServicio.listUser();
-        return new ResponseEntity<>(usuario, HttpStatus.OK);
+    @CrossOrigin(origins = "http://localhost:3000")
+    public List<Usuario> listProduct(){
+        var users = usuarioServicio.listUser();
+        return users;
+    }
+    
+  @GetMapping(value = "verify")
+        public ResponseEntity<UserResponse> verify(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader)
+    {
+        String token = authorizationHeader.substring(7);
+        return ResponseEntity.ok(usuarioServicio.verify(token));
     }
 
 

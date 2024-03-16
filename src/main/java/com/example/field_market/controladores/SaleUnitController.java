@@ -59,7 +59,7 @@ public class SaleUnitController {
     }
     
     //listar unidades de venta
-    @GetMapping 
+    @GetMapping("/listunit")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<Sales_unit>> getAllUnit(){
         List<Sales_unit> unit = unitSaleService.getAllSalesUnit();
