@@ -29,7 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Cheryf
  */
 @Controller
-@RequestMapping("/saleunit")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class SaleUnitController {
     

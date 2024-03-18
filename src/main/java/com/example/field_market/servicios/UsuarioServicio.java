@@ -9,8 +9,14 @@ import com.example.field_market.entidades.RegisterRequest;
 import com.example.field_market.entidades.Rol;
 import com.example.field_market.entidades.UserResponse;
 import com.example.field_market.entidades.Usuario;
+import com.example.field_market.repositorios.OpinionRepository;
+import com.example.field_market.repositorios.ProductRepository;
+import com.example.field_market.repositorios.SaleRepository;
+import com.example.field_market.repositorios.SalesUnitRepository;
 import com.example.field_market.repositorios.UsuarioRepository;
 import java.util.List;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +32,10 @@ public class UsuarioServicio {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final ProductRepository productRepository;
+    private final OpinionRepository opinionrepository;
+    private final SaleRepository saleRepository;
+    private final SalesUnitRepository unitRepository;
     
     public UserResponse login(LoginRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -68,6 +78,14 @@ public class UsuarioServicio {
                 .token(jwtService.getToken(user))
                 .usuario(user)
                 .build();
+    }
+    // eliminar usuario y productos asociados a el
+    @Transactional
+    public void deleteUser(String id){
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if(usuarioOptional.isPresent()){
+            usuarioRepository.deleteById(id);
+        }
     }
     
 }

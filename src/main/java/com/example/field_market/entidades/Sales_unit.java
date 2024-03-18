@@ -4,6 +4,7 @@
  */
 package com.example.field_market.entidades;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Sales_unit {
     @GenericGenerator(name = "uuid" , strategy = "uuid2")
     private String id_saleUnit;
     private String unidad;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario")
     Usuario usuario;
 }

@@ -6,6 +6,7 @@ package com.example.field_market.entidades;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,7 +43,7 @@ public class Sale {
     @Column(name = "total_pagado")
     Integer total_paid;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario")
     Usuario usuario;
     

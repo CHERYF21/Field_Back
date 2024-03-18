@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -79,8 +79,6 @@ public class ProductController {
     @PutMapping("/{id}/update")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> updateProduct(@PathVariable String id_product,@RequestParam("name") String name,
-            @RequestParam("id_category") String id_category,
-            @RequestParam("id") String id,
             @RequestParam("title") String title,
             @RequestParam("descripcion") String description,
             @RequestParam("price") Double price,
@@ -94,10 +92,6 @@ public class ProductController {
             product.setPrice(price);
             product.setQuantity(quantity);
             product.setImg(fileBytes);
-            Category category = categoryRepository.findById(id_category).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria no encontrada"));
-            product.setCategory(category);
-            Usuario usuario = usuariorepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-            product.setUsuario(usuario);
             
             productService.updateProduct(id_product, product);
             

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Cheryf
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class CategoryController {
     

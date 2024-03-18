@@ -4,6 +4,7 @@
  */
 package com.example.field_market.entidades;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,11 +40,11 @@ public class Sales_Detaill {
      @Column(name = "valor_unitario")
     private int unit_value;
      
-     @ManyToOne
+     @ManyToOne(cascade = CascadeType.ALL)
      @JoinColumn(name = "venta")
      Sale sale;
      
-     @ManyToOne
+     @ManyToOne(cascade = CascadeType.ALL)
      @JoinColumn(name = "product")
      Product product;
 }

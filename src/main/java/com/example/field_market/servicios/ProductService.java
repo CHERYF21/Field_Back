@@ -42,13 +42,22 @@ public class ProductService {
         if(respuesta.isPresent()){
             Product product = respuesta.get();
             
-               product.setTitle(updateProduct.getTitle());
-               product.setDescripcion(updateProduct.getDescripcion());
-               product.setImg(updateProduct.getImg());
-               product.setQuantity(updateProduct.getQuantity());
-               product.setPrice(updateProduct.getPrice());
-               product.setCategory(updateProduct.getCategory());
-               product.setSales_unit(updateProduct.getSales_unit());
+               if(updateProduct.getTitle() != null){
+                   product.setTitle(updateProduct.getTitle());
+               }
+               if(updateProduct.getDescripcion() != null){
+                   product.setDescripcion(updateProduct.getDescripcion());
+               }
+               if(updateProduct.getImg() != null){
+                  product.setImg(updateProduct.getImg()); 
+               }
+               if(updateProduct.getQuantity() != null){
+                  product.setQuantity(updateProduct.getQuantity());
+               }
+               if(updateProduct.getPrice() != null){
+                  product.setPrice(updateProduct.getPrice()); 
+               }
+              
                productRepository.save(product);
             } else {
             throw new MiException("Producto no encontrado");

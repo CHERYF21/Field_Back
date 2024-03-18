@@ -4,6 +4,7 @@
  */
 package com.example.field_market.entidades;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,11 +40,11 @@ public class Opinion {
     @Column(name = "rating")
     private int rating;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario")
     Usuario usuario;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "producto")
     Product product;
     
