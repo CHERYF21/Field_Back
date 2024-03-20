@@ -31,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Cheryf
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class SaleController {
     
